@@ -9,6 +9,7 @@ import java.util.List;
 
 import java.util.Optional;
 
+import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -114,14 +115,20 @@ public class DataController {
 	}
 	
 	@PostMapping(path="/add",consumes={"application/json"})
-	public Data create_node(@RequestBody Data data) {
-		Data addedData = dataRepository.save(data);
-		return addedData;
+	public int create_node(@RequestBody Data data) {
+		if(data.getName()!=null && data.getDescription()!=null) {
+			Data addedData = dataRepository.save(data);
+			return (int) addedData.getData_id();
+		}else {
+			throw new DataException("Record has null values or Record is missing fields!", null);
+		}
+		
 	}
 	
 	@PutMapping(path="/update/{id}", consumes= {"application/json"})
 	public Data update_node(@PathVariable Long id, @RequestBody Data newData) {
 
+		List<Data> dataArr = (List<Data>) dataRepository.findAll();
 		
 		if (dataRepository.findById(id).isPresent() && dataRepository.findById(id).get().getRead_only()){
             Data existingData = dataRepository.findById(id).get();
@@ -138,16 +145,30 @@ public class DataController {
             return updatedData;
 
         }else{
-            return null;
+        	if(id > dataArr.size()) {
+        		throw new DataException("Record does not exists!", null);	
+        	}else {
+        		throw new DataException("Record is Not Editable!", null);
+        	}
+        	
         }
 				
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public void delete_node(@PathVariable Long id) {
+	public String delete_node(@PathVariable Long id) {
+		List<Data> dataArr = (List<Data>) dataRepository.findAll();
 		if(dataRepository.findById(id).isPresent() && dataRepository.findById(id).get().getRead_only()) {
 			dataRepository.deleteById(id);
+			return "success";
+		}else {
+			if(id > dataArr.size()) {
+        		throw new DataException("Record does not exists!", null);	
+        	}else {
+        		throw new DataException("Record is Not Editable!", null);
+        	}
 		}
+		
 	}
 	
 }

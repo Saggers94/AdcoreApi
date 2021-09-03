@@ -33,6 +33,8 @@ public class DataService {
 					d.setParent(Integer.parseInt(data[3]));
 					if(Integer.parseInt(data[4]) == 1) {
 						read_only = true;
+					}else {
+						read_only = false;
 					}
 					d.setRead_only(read_only);
 					dr.save(d);

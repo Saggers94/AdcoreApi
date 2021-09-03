@@ -123,7 +123,7 @@ public class DataController {
 	public Data update_node(@PathVariable Long id, @RequestBody Data newData) {
 
 		
-		if (dataRepository.findById(id).isPresent()){
+		if (dataRepository.findById(id).isPresent() && dataRepository.findById(id).get().getRead_only()){
             Data existingData = dataRepository.findById(id).get();
             Date date = new Date();
             
@@ -145,7 +145,9 @@ public class DataController {
 	
 	@DeleteMapping("/delete/{id}")
 	public void delete_node(@PathVariable Long id) {
-		dataRepository.deleteById(id);
+		if(dataRepository.findById(id).isPresent() && dataRepository.findById(id).get().getRead_only()) {
+			dataRepository.deleteById(id);
+		}
 	}
 	
 }

@@ -13,18 +13,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.adcore.crud.model.Data;
 import com.springboot.adcore.crud.repository.DataRepository;
+import com.springboot.adcore.crud.service.DataService;
 
 
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/adcore/api/")
 public class DataController {
+	
+	@Autowired
+	private DataService ds;
+	
+	
+	@RequestMapping("/feedData")
+	public void setDataInDB() {
+		ds.saveData();
+	}
+	
 	@Autowired
 	private DataRepository dataRepository;
 	 
 	@GetMapping("/adcore")
-	public List<Data> getAllAstronauts(){
+	public List<Data> getAllData(){
 		return dataRepository.findAll();
 	}
 	

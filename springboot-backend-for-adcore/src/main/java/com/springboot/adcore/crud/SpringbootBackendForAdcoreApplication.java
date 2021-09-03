@@ -1,5 +1,8 @@
 package com.springboot.adcore.crud;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -26,16 +29,12 @@ public class SpringbootBackendForAdcoreApplication {
 @Component
 class DemoCommandLineRunner implements CommandLineRunner{
 
-	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
-	Date date = new Date(); 
-	long nextId = 0L;
 	
-	@Autowired
-	private DataRepository dataRepository;
 	
-
 	@Override
 	public void run(String... args) throws Exception {	
-		Data oneD = new Data("Node","node description",0,false,date,date);
 	}
+	
+	
+	
 }

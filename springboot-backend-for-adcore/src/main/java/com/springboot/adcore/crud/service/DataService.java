@@ -1,7 +1,6 @@
 package com.springboot.adcore.crud.service;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -22,13 +21,22 @@ public class DataService {
 	public void saveData() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/tree_data.csv"));
+			boolean read_only = false;
+			
+			line = br.readLine();
 			while((line = br.readLine())!=null) {
-				String [] data = line.split(",");
+				String [] data = line.split("	");
 				Data d = new Data();
-//				d.setName(name);
-//				d.setDescription(description);
-//				d.setParent(parent)
-//				d.isRead_only(read_only);
+				if(data.length == 5) {
+					d.setName(data[1]);
+					d.setDescription(data[2]);
+					d.setParent(Integer.parseInt(data[3]));
+					if(Integer.parseInt(data[4]) == 1) {
+						read_only = true;
+					}
+					d.setRead_only(read_only);
+					dr.save(d);
+				}	
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -100,7 +100,7 @@ public class Data {
 		this.parent = parent;
 	}
 
-	public boolean isRead_only() {
+	public boolean getRead_only() {
 		return read_only;
 	}
 
